@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: gradeai-backend
+    env: python
+    buildCommand: "pip install -r backend/requirements.txt && python -m spacy download en_core_web_sm"
+    startCommand: "python -m uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: CORS_ORIGINS
+        value: "*" # Change this to your Vercel frontend URL for security later
+      - key: DATABASE_URL
+        value: "sqlite:////data/database.db"
+    disk:
+      name: sqlite-data
+      mountPath: /data
+      sizeGB: 1

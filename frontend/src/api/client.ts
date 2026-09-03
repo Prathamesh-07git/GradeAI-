@@ -1,4 +1,8 @@
-const BASE_URL = "http://localhost:8000/api";
+// Vite sets import.meta.env.PROD to true automatically during `npm run build`.
+// This guarantees the correct URL is used in production without any env vars.
+export const BASE_URL = import.meta.env.PROD
+  ? "https://gradeai-iggp.onrender.com/api"
+  : "http://localhost:8000/api";
 
 export async function request<T>(
   endpoint: string,

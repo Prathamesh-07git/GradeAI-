@@ -1,0 +1,9 @@
+Flask
+Werkzeug
+nltk
+spacy
+scikit-learn
+numpy
+pandas
+sentence-transformers
+python-dotenv

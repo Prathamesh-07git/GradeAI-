@@ -1,0 +1,15 @@
+from backend.app.models.models import (
+    User,
+    Exam,
+    Question,
+    QuestionConcept,
+    QuestionKeyword,
+    Submission,
+    StudentAnswer,
+    Evaluation,
+    EvaluationConcept,
+    EvaluationKeyword,
+    TeacherReview,
+    ScoringConfiguration,
+    AuditLog,
+)

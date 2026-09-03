@@ -1,0 +1,42 @@
+# NLP Auto-Grading Project Explanation for Viva
+
+## 1. Project Overview
+This project is an automated evaluation system for subjective (descriptive) answers. It is designed to reduce the manual grading burden on educators while providing fair, consistent, and explainable feedback to students. The system evaluates answers based on their meaning rather than just exact word matches.
+
+## 2. Models Used
+The system leverages several pre-trained Natural Language Processing models:
+- **Sentence Transformers (SBERT)**: Specifically, the `all-MiniLM-L6-v2` model. This is a lightweight, fast, and highly efficient model used to generate sentence embeddings (vector representations of text) to capture the semantic meaning of the answers.
+- **spaCy**: Uses the `en_core_web_sm` model, which is a small English pipeline trained on web text, useful for general-purpose NLP tasks like tokenization or part-of-speech tagging if extended.
+- **NLTK (Natural Language Toolkit)**: Downloads and utilizes data like `punkt`, `stopwords`, and `wordnet` for fundamental text preprocessing tasks.
+
+## 3. Techniques Applied
+The evaluation engine relies on a multi-faceted approach to accurately grade subjective answers:
+
+### A. Semantic Similarity (Using SBERT & Cosine Similarity)
+- **How it works**: Both the student's answer and the teacher's reference answer are encoded into high-dimensional vectors using the SBERT model. The system then calculates the **Cosine Similarity** between these two vectors.
+- **Purpose**: This ensures the system understands the actual meaning and context of the student's answer, even if they used different words or phrasing than the reference answer.
+- **Weightage**: This semantic understanding is the core of the evaluation, carrying 70% of the final score weight.
+
+### B. Keyword Matching
+- **How it works**: The system checks the student's answer against a list of mandatory keywords provided by the teacher using text matching techniques.
+- **Purpose**: It ensures that specific domain terminology, formulas, or required vocabulary are present in the answer.
+- **Weightage**: This accounts for 30% of the final score.
+
+### C. Concept Coverage
+- **How it works**: Similar to keyword matching, the system checks for the presence of broader expected concepts.
+- **Purpose**: It identifies missing ideas to help formulate constructive feedback for the student.
+
+### D. Explainable Feedback Generation
+- **How it works**: The system uses a rule-based approach to generate human-readable feedback. It looks at the semantic score (e.g., scoring >0.85 generates "Excellent understanding", while >0.5 generates "Good understanding") and appends sentences detailing exactly which keywords or concepts were missed.
+- **Purpose**: To provide transparency so students know exactly why they received a specific grade and how they can improve.
+
+## 4. Final Scoring Algorithm
+The final score is a weighted combination designed to reward both correct meaning and precise terminology:
+`Final Percentage = (0.7 * Semantic_Score) + (0.3 * Keyword_Score)`
+The marks awarded are then calculated as `Final Percentage * Max_Marks`.
+
+## 5. Technology Stack Overview
+- **Backend Framework**: Python with Flask
+- **Frontend**: HTML5, CSS3, JavaScript
+- **NLP / ML Libraries**: Sentence-Transformers, NLTK, spaCy
+- **Database**: SQLite (designed to easily scale to PostgreSQL/MySQL)

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="exam-container" style="max-width: 800px; margin: 0 auto; background: var(--white); padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+    <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 2rem;">
+        <h2 style="color: var(--primary-color);">{{ exam['title'] }}</h2>
+        <p style="color: var(--text-light); margin-top: 0.5rem;">{{ exam['description'] }}</p>
+        <p style="color: var(--text-color); font-weight: 500; margin-top: 1rem;">Total Marks: {{ exam['total_marks'] }}</p>
+    </div>
+
+    {% if questions %}
+        <form method="post">
+            {% for idx in range(questions|length) %}
+                <div class="question-block" style="margin-bottom: 2rem; padding: 1.5rem; background: var(--bg-color); border-radius: 0.5rem; border: 1px solid var(--border-color);">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-color); line-height: 1.5;">
+                        Q{{ idx + 1 }}. {{ questions[idx]['question_text'] }}
+                        <span style="float: right; color: var(--primary-color); font-size: 0.9rem;">[{{ questions[idx]['maximum_marks'] }} marks]</span>
+                    </h4>
+                    <textarea name="question_{{ questions[idx]['id'] }}" rows="5" required style="width: 100%; padding: 1rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; font-family: inherit; font-size: 1rem;" placeholder="Type your detailed answer here..."></textarea>
+                </div>
+            {% endfor %}
+            <div style="margin-top: 2rem; text-align: right;">
+                <button type="submit" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">Submit Examination</button>
+            </div>
+        </form>
+    {% else %}
+        <p style="color: var(--text-light); text-align: center; padding: 2rem 0;">This exam currently has no questions.</p>
+        <a href="{{ url_for('student.dashboard') }}" class="btn btn-secondary">Return to Dashboard</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+    <h1>Automate Subjective Grading with NLP</h1>
+    <p>A smart, AI-driven platform for evaluating descriptive student answers fairly, consistently, and with actionable feedback.</p>
+    <div class="cta-buttons">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Login to Dashboard</a>
+    </div>
+</div>
+<div class="features">
+    <div class="feature-card">
+        <h3>Semantic Evaluation</h3>
+        <p>Uses advanced NLP models like Sentence Transformers to understand the meaning of answers, not just exact words.</p>
+    </div>
+    <div class="feature-card">
+        <h3>Explainable AI</h3>
+        <p>Teachers get a full breakdown of why marks were awarded, showing missing concepts and confidence scores.</p>
+    </div>
+    <div class="feature-card">
+        <h3>Human in the Loop</h3>
+        <p>AI assists rather than replaces. Teachers can manually override marks if the evaluation confidence is low.</p>
+    </div>
+</div>
+{% endblock %}

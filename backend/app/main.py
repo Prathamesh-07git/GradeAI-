@@ -63,10 +63,11 @@ app = FastAPI(
 
 from backend.app.config import settings
 
-# Configure CORS dynamically from environment settings
+# Configure CORS dynamically from environment settings (supports regex wildcard for Vercel origins)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins_list,
+    allow_origins=settings.cors_origins_list if settings.CORS_ORIGINS != "*" else [],
+    allow_origin_regex=".*" if settings.CORS_ORIGINS == "*" else None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

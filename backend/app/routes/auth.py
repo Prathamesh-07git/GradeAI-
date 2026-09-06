@@ -54,15 +54,10 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
 def login(login_data: UserLogin, db: Session = Depends(get_db)):
     # Fetch user
     user = db.query(User).filter(User.email == login_data.email).first()
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Account not found. Please create an account first."
-        )
-    if not verify_password(login_data.password, user.password_hash):
+    if not user or not verify_password(login_data.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Incorrect password. Please try again."
+            detail="Incorrect email or password. Please try again."
         )
     
     # Generate token

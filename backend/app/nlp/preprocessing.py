@@ -3,15 +3,15 @@ import unicodedata
 import re
 from typing import List
 
-# Load spaCy English model. Fall back and download if missing.
+# Load spaCy English model with disabled NER to reduce RAM footprint
 try:
-    nlp = spacy.load("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm", disable=["ner"])
 except OSError:
     import subprocess
     import sys
     print("Downloading spaCy en_core_web_sm model...")
     subprocess.run([sys.executable, "-m", "spacy", "download", "en_core_web_sm"], check=True)
-    nlp = spacy.load("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm", disable=["ner"])
 
 # Words we want to protect during stopword removal because they modify semantic meaning
 NEGATIONS_AND_CONNECTORS = {

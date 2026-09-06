@@ -281,13 +281,18 @@ def submit_exam(
     db.flush()
     
     # Complete submission metadata
-    submission.status = "submitted"  # Temporary status before graded
+    submission.status = "submitted"
     submission.submitted_at = datetime.datetime.utcnow()
     db.commit()
     
-    # Trigger NLP Evaluation Pipeline asynchronously
-    background_tasks.add_task(evaluate_submission_background, submission.id, current_user.id)
+    # Run NLP Evaluation Pipeline immediately to ensure grades & feedback are saved
+    try:
+        evaluate_submission_background(submission.id, current_user.id)
+    except Exception as e:
+        print(f"Error during synchronous evaluation: {e}")
+        background_tasks.add_task(evaluate_submission_background, submission.id, current_user.id)
     
+    db.refresh(submission)
     return submission
 
 @router.get("", response_model=List[SubmissionOut])
@@ -307,6 +312,17 @@ def list_submissions(
     if examId is not None:
         query = query.filter(Submission.exam_id == examId)
         
+    submissions = query.order_by(Submission.started_at.desc()).all()
+
+    # Auto-grade fallback for any submission that is 'submitted' but missing evaluation
+    for sub in submissions:
+        if sub.status == "submitted":
+            try:
+                evaluate_submission_background(sub.id, sub.student_id)
+            except Exception:
+                pass
+    
+    db.expire_all()
     return query.order_by(Submission.started_at.desc()).all()
 
 @router.get("/{id}", response_model=SubmissionOut)
@@ -333,5 +349,14 @@ def get_submission(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You do not own this examination"
         )
+
+    # Auto-grade fallback if submitted but missing evaluation records
+    if submission.status == "submitted" or any(ans.evaluation is None for ans in submission.answers):
+        try:
+            evaluate_submission_background(submission.id, submission.student_id)
+            db.expire_all()
+            submission = db.query(Submission).filter(Submission.id == id).first()
+        except Exception:
+            pass
         
     return submission

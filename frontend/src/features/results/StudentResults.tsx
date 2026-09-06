@@ -27,8 +27,8 @@ export const StudentResults: React.FC = () => {
     try {
       setLoading(true);
       const data = await request<Submission[]>("/submissions");
-      // Filter out 'started' (in-progress) and show only graded/reviewed
-      const completed = data.filter((sub) => sub.status === "graded" || sub.status === "reviewed");
+      // Filter out 'started' (in-progress) and show completed attempts (graded, reviewed, submitted)
+      const completed = data.filter((sub) => sub.status === "graded" || sub.status === "reviewed" || sub.status === "submitted");
       setSubmissions(completed);
     } catch (err: any) {
       setError(err.message || "Failed to load results.");

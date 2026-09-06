@@ -5,7 +5,14 @@ from backend.app.nlp.embeddings import embedding_manager
 
 def match_keywords(student_answer: str, expected_keywords: List[str]) -> Dict[str, Any]:
     cleaned_student = clean_text(student_answer)
-    if not cleaned_student or not expected_keywords:
+    if not expected_keywords:
+        return {
+            "matched": [],
+            "missing": [],
+            "score": 1.0,
+            "details": []
+        }
+    if not cleaned_student:
         return {
             "matched": [],
             "missing": expected_keywords,

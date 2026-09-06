@@ -58,8 +58,8 @@ def calculate_final_grade(
     )
     final_score = get_normalized_score(final_score)
 
-    # HARD ZERO RULE: No meaningful evidence
-    if con < 0.05 and key < 0.05:
+    # HARD ZERO RULE: Only trigger if student shows no concept, keyword, AND semantic relevance
+    if con < 0.05 and key < 0.05 and sem < 0.35:
         final_score = 0.0
 
     # Smart Grade Boosting:

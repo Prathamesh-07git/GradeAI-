@@ -93,7 +93,12 @@ def match_concepts(student_answer: str, expected_concepts: List[Dict[str, Any]])
     Matches student sentences to reference concepts.
     expected_concepts is a list of dicts: [{"id": int, "concept_text": str, "importance_weight": float}]
     """
-    if not student_answer.strip() or not expected_concepts:
+    if not expected_concepts:
+        return {
+            "concepts": [],
+            "score": 1.0
+        }
+    if not student_answer.strip():
         return {
             "concepts": [],
             "score": 0.0

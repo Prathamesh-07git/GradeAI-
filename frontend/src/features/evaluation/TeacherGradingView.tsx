@@ -183,7 +183,7 @@ export const TeacherGradingView: React.FC = () => {
         </div>
 
         {/* Questions navigation tabs */}
-        <div className="flex gap-1 bg-muted p-1 rounded-xl">
+        <div className="flex gap-1 bg-muted p-1 rounded-xl overflow-x-auto whitespace-nowrap scrollbar-hide">
           {answers.map((ans, idx) => (
             <button
               key={ans.id}

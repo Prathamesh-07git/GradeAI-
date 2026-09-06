@@ -779,7 +779,7 @@ export const ExamBuilder: React.FC = () => {
               <CheckCircle className="text-emerald-500" />
               <span>Review Examination Specifications</span>
             </h3>
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="text-muted-foreground block">Exam Title:</span>
                 <span className="font-bold">{watch("title")}</span>

@@ -8,10 +8,8 @@ services:
       - key: PYTHON_VERSION
         value: 3.10.0
       - key: CORS_ORIGINS
-        value: "*" # Change this to your Vercel frontend URL for security later
-      - key: DATABASE_URL
-        value: "sqlite:////data/database.db"
-    disk:
-      name: sqlite-data
-      mountPath: /data
-      sizeGB: 1
+        value: "*"
+      - key: PYTHONPATH
+        value: "."
+      - key: SECRET_KEY
+        generateValue: true

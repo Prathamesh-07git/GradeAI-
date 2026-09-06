@@ -10,3 +10,4 @@ sentence-transformers
 spacy
 scikit-learn
 nltk
+psycopg2-binary

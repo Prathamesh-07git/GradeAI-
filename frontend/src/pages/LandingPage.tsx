@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { BASE_URL } from "../api/client";
 import {
   GraduationCap,
   Sparkles,
@@ -39,7 +40,7 @@ export const LandingPage: React.FC = () => {
       // To satisfy 'no fake AI' we can hit our API or run a simple local similarity simulation.
       // Let's call the backend or if backend is offline, do a fast simulation.
       // We will define a demo endpoint on the backend in a moment, so let's fetch it!
-      const res = await fetch("http://localhost:8000/api/evaluations/demo", {
+      const res = await fetch(`${BASE_URL}/evaluations/demo`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -240,7 +241,7 @@ export const LandingPage: React.FC = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-muted-foreground">Expected Keywords (comma-sep)</label>
                 <input

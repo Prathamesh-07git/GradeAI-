@@ -22,8 +22,8 @@ COPY . .
 # Run the setup script to pre-download AI models (spaCy, SBERT) during the build phase
 RUN python backend/setup_models.py
 
-# Hugging Face Spaces runs apps on port 7860 by default
-EXPOSE 7860
+# Expose default port (Cloud Run will override via $PORT)
+EXPOSE 8080
 
-# Command to run the application
-CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "7860"]
+# Command to run the application (uses PORT env var if available, defaults to 8080)
+CMD uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-8080}

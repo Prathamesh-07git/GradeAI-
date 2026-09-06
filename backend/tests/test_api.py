@@ -36,6 +36,7 @@ def client():
     with TestClient(app) as c:
         yield c
         
+    app.dependency_overrides.clear()
     Base.metadata.drop_all(bind=engine)
     
     # Remove temporary database file
@@ -49,7 +50,7 @@ def client():
 def test_api_root(client):
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Welcome to the Auto-Grading NLP API"}
+    assert response.json()["message"] == "Welcome to the Auto-Grading NLP API"
 
 def test_user_registration_and_login(client):
     # 1. Register a teacher

@@ -14,6 +14,14 @@ def detect_negation(sentence: str) -> bool:
     words = set(clean_text(sentence).lower().split())
     return not words.isdisjoint(NEGATION_WORDS)
 
+# Pre-instantiate Stemmer singleton to avoid repeated re-creation in matching loops
+try:
+    from nltk.stem import PorterStemmer
+    stemmer = PorterStemmer()
+except Exception:
+    stemmer = None
+import re
+
 def calculate_rule_based_similarity(concept: str, sentence: str) -> float:
     """
     Checks if the concept is directly referenced or described in the sentence
@@ -68,12 +76,8 @@ def calculate_rule_based_similarity(concept: str, sentence: str) -> float:
         if any(w in sentence for w in ["override", "overriding", "overridden"]):
             return 1.0
 
-    # 3. Generic stem-subset match (using PorterStemmer)
-    try:
-        from nltk.stem import PorterStemmer
-        import re
-        stemmer = PorterStemmer()
-        
+    # 3. Generic stem-subset match (using pre-initialized stemmer)
+    if stemmer is not None:
         stopwords = {"and", "or", "in", "of", "the", "a", "an", "to", "is", "are", "was", "were", "relationship", "method", "methods"}
         c_words = re.findall(r'[a-zA-Z0-9]+', concept)
         s_words = re.findall(r'[a-zA-Z0-9]+', sentence)
@@ -83,8 +87,6 @@ def calculate_rule_based_similarity(concept: str, sentence: str) -> float:
         
         if c_stems and c_stems.issubset(s_stems):
             return 1.0
-    except Exception:
-        pass
         
     return 0.0
 

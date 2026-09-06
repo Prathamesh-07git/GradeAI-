@@ -105,7 +105,7 @@ def evaluate_student_answer(
         missing_keywords=kw_result["missing"]
     )
 
-    return {
+    result = {
         "keyword_score": round(keyword_score, 4),
         "tfidf_score": round(tfidf_score, 4),
         "semantic_score": round(semantic_score, 4),
@@ -118,3 +118,7 @@ def evaluate_student_answer(
         "concepts": concept_result["concepts"],
         "keywords": kw_result["matched"]
     }
+
+    import gc
+    gc.collect()
+    return result

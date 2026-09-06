@@ -44,6 +44,7 @@ class EmbeddingModelManager:
             
         with torch.no_grad():
             emb = model.encode(text_clean, convert_to_tensor=True, show_progress_bar=False)
+            emb = emb.detach().cpu()
             
         if len(self._cache) >= self._MAX_CACHE_SIZE:
             # Evict cache to prevent unbounded memory growth

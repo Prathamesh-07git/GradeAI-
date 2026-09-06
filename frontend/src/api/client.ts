@@ -26,7 +26,7 @@ export async function request<T>(
     headers,
   });
 
-  if (response.status === 401) {
+  if (response.status === 401 && !endpoint.includes("/auth/")) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     // Only redirect if we are not already on login or register page

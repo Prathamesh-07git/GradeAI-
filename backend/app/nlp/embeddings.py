@@ -25,7 +25,15 @@ class EmbeddingModelManager:
         if self._model is None:
             print(f"Loading SentenceTransformer model '{settings.SENTENCE_TRANSFORMER_MODEL}' in low-memory mode...")
             try:
-                self._model = SentenceTransformer(settings.SENTENCE_TRANSFORMER_MODEL)
+                raw_model = SentenceTransformer(settings.SENTENCE_TRANSFORMER_MODEL)
+                try:
+                    # Quantize 32-bit float weights to 8-bit integers (qint8) to reduce model memory footprint by ~50%
+                    self._model = torch.quantization.quantize_dynamic(
+                        raw_model, {torch.nn.Linear}, dtype=torch.qint8
+                    )
+                except Exception as q_err:
+                    print(f"Quantization fallback: {q_err}")
+                    self._model = raw_model
             except Exception as e:
                 print(f"Error loading SBERT model: {e}")
                 self._model = None

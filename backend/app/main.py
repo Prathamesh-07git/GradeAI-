@@ -73,7 +73,12 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Auto-Grading NLP API"}
+    return {"message": "Welcome to the Auto-Grading NLP API", "status": "online"}
+
+@app.get("/health")
+@app.get("/api/health")
+def health_check():
+    return {"status": "ok", "service": "GradeAI Backend API"}
 
 from backend.app.routes import auth, exams, submissions, evaluations, analytics, profile
 app.include_router(auth.router, prefix="/api")

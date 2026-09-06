@@ -196,6 +196,8 @@ export const ExamSession: React.FC = () => {
     if (!submission) return;
     try {
       setSubmitting(true);
+      if (autosaveTimerRef.current) clearInterval(autosaveTimerRef.current);
+      
       // Trigger final save first
       const answerPayload = Object.entries(answers).map(([qId, text]) => ({
         question_id: Number(qId),

@@ -285,12 +285,8 @@ def submit_exam(
     submission.submitted_at = datetime.datetime.utcnow()
     db.commit()
     
-    # Run NLP Evaluation Pipeline immediately to ensure grades & feedback are saved
-    try:
-        evaluate_submission_background(submission.id, current_user.id)
-    except Exception as e:
-        print(f"Error during synchronous evaluation: {e}")
-        background_tasks.add_task(evaluate_submission_background, submission.id, current_user.id)
+    # Run NLP Evaluation Pipeline asynchronously so the frontend doesn't block (prevents autosave 404 errors during long loads)
+    background_tasks.add_task(evaluate_submission_background, submission.id, current_user.id)
     
     db.refresh(submission)
     return submission

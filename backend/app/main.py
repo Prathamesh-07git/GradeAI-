@@ -10,8 +10,9 @@ from backend.app.database import engine, Base
 # Import models to ensure they are registered for create_all
 from backend.app.models import models
 
-# Auto-create database tables if they do not exist
+print("Initializing GradeAI database schema...")
 Base.metadata.create_all(bind=engine)
+print("Database schema initialization complete.")
 
 def auto_seed_default_users():
     from backend.app.database import SessionLocal
